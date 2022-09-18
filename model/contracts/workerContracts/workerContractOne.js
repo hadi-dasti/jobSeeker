@@ -13,4 +13,4 @@ const workerContractSchema = new Schema({
 
 
 
-module.exports = model('WorkerContractOne',workerContractSchema)
+module.exports = model('WorkerContract',workerContractSchema)

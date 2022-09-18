@@ -11,7 +11,7 @@ const employerSchema = new Schema({
     address:{type:String , required :[true,'Please provide a address']},
     nationalCode:{type : String, minLength :5 , maxLength : 10 , required :[true,'Please provide a nationalCode']},
     gender: {type: String, enum: ['MALE', 'FEMALE', 'COMPANY'], default: null, required :[true,'Please provide a gender']},
-    contracts :{type :Schema.Types.ObjectId , ref :'Contract', required :[true,'Please provide a contracts']}
+    employerContract :{ type:[Schema.Types.ObjectId] ,ref:'EmployerContract', required : true}
 },{
     timestamps : true
 })
