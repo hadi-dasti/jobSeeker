@@ -8,6 +8,6 @@ const {registerWorker,loginWorker} = require('../../../../controller/worker/work
 router.post('/register', registerWorker)
 
 // login worker on app
-router.post('/login',loginWorker)
+// router.post('/login',loginWorker)
 
 module.exports = router
