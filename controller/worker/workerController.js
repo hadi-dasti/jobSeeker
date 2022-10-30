@@ -1,8 +1,7 @@
 const  Worker = require('../../model/worker/Worker')
+ const {generateOtp} =require('../../utils/otp')
 
-
-
-
+// register worker
 exports.registerWorker = async(req,res)=>{
 
     try{
@@ -15,15 +14,14 @@ exports.registerWorker = async(req,res)=>{
         socialSecurityNumber,
         phone,
         mobileNumber,
-        otpSource,
         roleWorker,
         password,
     } = req.body;
 
-    // duplicated phone worker
-        const duplicatedPhoneWorker =  await Worker.find({mobileNumber})
+    // duplicated mobileNumber worker
+        const duplicatedMobileNumberWorker =  await Worker.find({mobileNumber})
 
-        if(duplicatedPhoneWorker.length){
+        if(duplicatedMobileNumberWorker.length){
             return res.status(400).json({
                 success : false,
                 msg :'شماره موبایل وارد شده تکراری میباشد دوباره امتحان کنید'
@@ -31,34 +29,84 @@ exports.registerWorker = async(req,res)=>{
         }
 
         // create worker
-        const workers = await Worker.create({
-
+        const createWorker = await Worker.create({
             fName,
             lName,
             gender,
             address,
             socialSecurityNumber,
             phone,
-            otpSource,
             mobileNumber,
             roleWorker,
             password,
         })
 
-        const newWorkers = await workers.save();
+        const worker = await createWorker.save();
 
-        if(!newWorkers){
-           return res.status(404).json({
+        if(!worker){
+            return res.status(404).json({
                success : false,
                msg : 'worker not found'
            })
         }
 
-        return res.status(201).json({
+            //TODO  SEND SMS TO CUSTOMER
+
+       return res.status(201).json({
             success : true,
-             data :{newWorkers},
-            msg : ' create worker successfully'
+            data :{
+                workerId : worker._id
+            },
+            msg : ' create REGISTER worker successfully'
         })
+
+    }catch(err){
+        console.log(err)
+        return res.status(500).json({
+            success : false,
+            msg :'Internal Server Error'
+        })
+    }
+}
+
+
+// login worker with otp mobileNumber
+exports.loginWorker = async(req,res)=>{
+
+    try{
+            const {mobileNumber} = req.body;
+
+            const worker = await Worker.findOne({mobileNumber})
+
+        if(!worker) {
+             return  res.status(400).json({
+                    success : false,
+                    msg :'mobileNumber_not_found_ERR'
+                });
+        }
+
+        // generate otp
+        let otp = generateOtp(6)
+
+        worker.mobileOtp = otp ;
+        console.log(otp)
+
+        await worker.save();
+
+        //todo => send otp to mobile for login
+
+        return res.status(200).json({
+            success : true,
+            data :{
+                workerId : worker._id
+            },
+            msg: "OTP send to your registered mobileNumber number"
+        })
+
+
+
+
+
 
     }catch(err){
         console.log(err)
