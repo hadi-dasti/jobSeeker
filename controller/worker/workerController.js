@@ -1,4 +1,4 @@
-const  Worker = require('../../model/worker/Worker')
+const Worker = require('../../model/worker/Worker')
  const {generateOtp} =require('../../utils/otp')
 
 // register worker
@@ -103,16 +103,56 @@ exports.loginWorker = async(req,res)=>{
             msg: "OTP send to your registered mobileNumber number"
         })
 
-
-
-
-
-
     }catch(err){
         console.log(err)
         return res.status(500).json({
             success : false,
             msg :'Internal Server Error'
+        })
+    }
+}
+
+//verify oto and send to worker
+exports.verifyOtpWorker = async(req,res)=>{
+
+    try{
+        const {otp,workerId} = req.body
+
+        const worker = await Worker.findById({ _id:workerId})
+
+        if(!worker){
+            return res.status(404).json({
+                success : false,
+                msg : 'workerId not found'
+            })
+        }
+        // match otp
+        if(worker.mobileOtp !== otp){
+            return res.status(400).json({
+                success : false,
+                msg:"Bad Request"
+            })
+        }
+
+        // jwt
+        const token = await worker.createToken()
+
+        worker.mobileOtp = ""
+        await worker.save()
+
+        return res.status(200).json({
+            success:true,
+            data :{
+                token,
+                workerId : worker._id
+            },
+            msg :"successfully verify worker with otpMobile"
+        })
+    }catch(err){
+        console.log(err)
+        return res.status(500).json({
+            success : false,
+            msg :"Internal Server Error"
         })
     }
 }
