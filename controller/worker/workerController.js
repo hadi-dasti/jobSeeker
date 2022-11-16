@@ -156,3 +156,12 @@ exports.verifyOtpWorker = async(req,res)=>{
         })
     }
 }
+
+
+exports.verifyWorker = async(req,res,)=>{
+    try{
+        res.json('ok test')
+    }catch(err){
+        console.log(err)
+    }
+}

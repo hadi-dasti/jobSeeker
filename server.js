@@ -6,8 +6,8 @@ require('dotenv').config()
 const {PORT,NODE_ENV} = require('./config')
 
 
-// router
-const workerRouter = require('./router/routes')
+// routes
+const workerRouter = require('./routes/routes')
 
 // require db
 const DB = require('./db/mongo')
@@ -29,7 +29,7 @@ if( NODE_ENV === 'development'){
     app.use(morgan('dev'))
 }
 
-// router middleware
+// routes middleware
 app.use('/', workerRouter)
 
 

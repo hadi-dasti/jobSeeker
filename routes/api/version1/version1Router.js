@@ -1,7 +1,7 @@
 const router = require('express').Router()
 
 try{
-    // config router worker
+    // config routes worker
     const workerRouter = require('./worker/workerRouter')
     router.use('/worker',workerRouter)
 
