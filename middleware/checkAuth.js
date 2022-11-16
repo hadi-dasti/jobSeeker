@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken')
-const {JWT_SECRET} = require('../../config')
-// const Worker = require('../../model/worker/Worker')
+const {JWT_SECRET} = require('../config')
+
 
 
 
@@ -27,14 +27,6 @@ router.use(async(req,res,next)=>{
             })
         }
 
-        // const worker = await Worker.findById({id:decode})
-        //
-        // if(!worker){
-        //     return res.status(404).json({
-        //         success :false,
-        //         msg : 'not worker found with this id'
-        //     })
-        // }
 
     return next()
 

@@ -1,5 +1,5 @@
 const Worker = require('../../model/worker/Worker')
- const {generateOtp} =require('../../utils/otp')
+const {generateOtp} =require('../../utils/otp')
 
 // register worker
 exports.registerWorker = async(req,res)=>{
@@ -100,7 +100,7 @@ exports.loginWorker = async(req,res)=>{
             data :{
                 workerId : worker._id
             },
-            msg: "OTP send to your registered mobileNumber number"
+            msg: "OTP send to mobileNumber"
         })
 
     }catch(err){

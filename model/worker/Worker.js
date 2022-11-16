@@ -10,7 +10,7 @@ const workerSchema = new Schema({
     gender:{type:String, enum :['MALE','FEMALE'], required:[true,'Please provide a gender']},
     address :{type : String , required :[true,'Please provide a address']},
     socialSecurityNumber:{type :String,index:true, minLength:9 , required :[true,'Please Provide a socialSecurityNumber']},
-    phone : {type :String, minLength: 8, required :[true,'Please provide a phone']},
+    phone : {type :String, minLength: 7, required :[true,'Please provide a phone']},
     mobileOtp:{type:String },
     mobileNumber:{type :String, minLength :9 , maxLength :11, unique: false, index :true, required :[true,'Please provide a mobileNumber']},
     roleWorker:{type :String, enum :['SIMPLE','SPECIAL'],required :[true,'Please provide a roleWorker']},
@@ -21,7 +21,7 @@ const workerSchema = new Schema({
     {timestamps :true}
 )
 
-// middleware
+// hook  middleware
  workerSchema.pre('save',async function(next){
         if(!this.isModified('password')){
             next()
@@ -29,14 +29,13 @@ const workerSchema = new Schema({
 // hash password
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
-
     return next()
 })
 
 // sign token
 workerSchema.methods.createToken = async function(){
           return await jwt.sign({id:this._id},
-                JWT_SECRET,
+              JWT_SECRET,
                 {expiresIn:JWT_EXPIRE})
 }
 
