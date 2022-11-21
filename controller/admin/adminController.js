@@ -17,11 +17,11 @@ exports.registerAdmin = async (req,res)=>{
 
 
         // check duplicate ADMIN
-        const adminExist = await Admin.find({email,phoneNumber})
+        const adminExist = await Admin.findOne({phoneNumber})
         if(adminExist){
             return res.status(400).json({
                 success : false,
-                msf : 'ALREADY_ADMIN_EXISTS_ERR'
+                msg : 'ALREADY_ADMIN_EXISTS_ERR'
             })
 
         }
@@ -95,7 +95,7 @@ exports.loginAdmin = async(req,res)=>{
 
         //create otp
         const otp = generateOtp(6)
-        admin.phoneNumber = otp;
+        admin.otpMobile = otp;
         await admin.save()
         console.log(otp)
 
@@ -114,6 +114,51 @@ exports.loginAdmin = async(req,res)=>{
         return res.status(500).json({
             success : false,
             msg : 'Internal Server Error'
+        })
+    }
+}
+
+// verify admin
+exports.verifyAdmin = async(req,res)=>{
+    try{
+        const {otp,adminId} = req.body
+
+        // match adminId
+        const admin = await Admin.findById({_id:adminId},{"__v":0})
+        if(!admin){
+            return res.status(404).json({
+                success : false,
+                msg : 'ERR_NOT_FOUND'
+            })
+        }
+        // match otp
+        if(admin.otpMobile !== otp){
+            return res.status(400).json({
+                success : false,
+                msg : 'Bad_request'
+            })
+        }
+
+        // create jwt
+        const token = await admin.createTokenAdmin()
+
+        admin.otpMobile = "";
+        await  admin.save()
+
+        return res.status(200).json({
+            success : true,
+            data :{
+                adminId : admin._id,
+                token
+            },
+            msg : "successfully verify admin"
+        })
+
+    }catch(err){
+        console.log(err)
+        return res.status(500).json({
+            success :false,
+            msg: 'Internal Server Error'
         })
     }
 }
