@@ -7,7 +7,7 @@ exports.registerWorker = async(req,res)=>{
     try{
 
     const {
-        fName ,
+        fName,
         lName,
         gender,
         address,
