@@ -9,7 +9,7 @@ const {validationRegisterWorker,validationLoginWorker,validationVerifyWorker} = 
 // config error validation
 const {validationError} = require('../../../../validation/validationResult')
 // controller path
-const {registerWorker,loginWorker,verifyOtpWorker,verifyWorker} = require('../../../../controller/worker/workerController')
+const {registerWorker,loginWorker,verifyOtpWorker} = require('../../../../controller/worker/workerController')
 
 
 // register worker on app
@@ -20,6 +20,7 @@ router.post('/login_worker_otp',validationLoginWorker,validationError,loginWorke
 router.post('/verify_otp',validationVerifyWorker,validationError,verifyOtpWorker)
 
 
-router.get('/test_token',checkAuth,verifyWorker)
+// config contract for worker
+router.use('/contract',checkAuth ,require('./contract/contractStructureRouter'))
 
 module.exports = router

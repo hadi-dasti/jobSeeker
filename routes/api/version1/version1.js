@@ -15,6 +15,8 @@ try{
     // router admin
     const adminRouter = require('./admin/adminRouter')
     router.use('/admin',adminRouter)
+
+
 }catch(err){
     console.log(err)
 }
