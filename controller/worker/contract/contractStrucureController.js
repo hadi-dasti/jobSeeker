@@ -1,4 +1,4 @@
-const  ContractStructure = require('../../../model/contract/ContractStructure')
+const  ContractStructure = require('../../../model/worker/contract/ContractStructure')
 
 
 
@@ -68,7 +68,7 @@ exports.getAllContract = async(req,res)=>{
         return res.status(200).json({
             success : true,
             data:{
-               ContractId: contracts._id
+                contracts
                 },
             msg :'SUCCESSFULLY GET ALL CONTRACT'
         })
@@ -96,7 +96,7 @@ exports.updateContract = async(req,res)=>{
 
         const contractID = req.params;
 
-        const contract = ContractStructure.findByIdAndUpdate(contractID,{
+        const contract = await ContractStructure.findOneAndUpdate(contractID,{
 
             $set : {
                 titleJobContract,
@@ -138,7 +138,7 @@ exports.deleteContract = async(req,res)=>{
     try{
         const contractID = req.params;
 
-        const contract = await ContractStructure.findByIdAndDelete(contractID)
+        const contract = await ContractStructure.findOneAndDelete(contractID)
 
         if(!contract){
             return res.status(404).json({
