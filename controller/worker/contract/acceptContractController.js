@@ -3,7 +3,7 @@ const ContractStructure = require('../../../model/worker/contract/ContractStruct
 const Worker = require('../../../model/worker/Worker')
 
 
-
+// create AcceptContract with ContractId and WorkerId
 exports.acceptContractWorker = async(req,res)=>{
     try{
             const {acceptContract} =req.body;
@@ -60,6 +60,68 @@ exports.acceptContractWorker = async(req,res)=>{
         return res.status(500).json({
             success : false,
             msg : 'Internal Error'
+        })
+    }
+}
+
+// get all document acceptContract with lookup
+exports.getAllAcceptContract = async(req,res)=>{
+
+    try{
+        const acceptContract = await AcceptContract.aggregate([
+            {
+                $lookup:{
+                    from :"workers",
+                    localField :"workerId",
+                    foreignField :"_id",
+                    as : 'worker'
+                }
+            },
+            {
+                $unwind :"$worker"
+            },
+            {
+                $lookup :{
+                    from : "contractstructures",
+                    localField: "contractId",
+                    foreignField: "_id",
+                    as:"contractStructure"
+                }
+            },
+            {
+                $unwind : "$contractStructure"
+            },
+            {
+                $project:{
+                    "workerId":0,
+                    "contractId":0,
+                    "createdAt": 0,
+                    "updatedAt": 0,
+                    "__v": 0
+                }
+            }
+            ])
+
+        if(!acceptContract){
+            return res.status(404).json({
+                success : false,
+                msg : 'NOT-FOUND-ERROR'
+            })
+        }
+
+        return res.status(200).json({
+            success:true,
+            data :{
+                 acceptContract
+            },
+            msg : 'successfully get all acceptContract with lookup'
+        })
+
+    }catch(err){
+        console.log(err)
+        return res.status(500).json({
+            success : false,
+            msg : "Internal Server Error"
         })
     }
 }
