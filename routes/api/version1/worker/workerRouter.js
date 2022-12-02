@@ -20,7 +20,11 @@ router.post('/login_worker_otp',validationLoginWorker,validationError,loginWorke
 router.post('/verify_otp',validationVerifyWorker,validationError,verifyOtpWorker)
 
 
+
+
 // config contract for worker
 router.use('/contract',checkAuth ,require('./contract/contractStructureRouter'))
+// config Accept_Contract
+router.use('/accept_contract',require('./contract/acceptContractRouter'))
 
 module.exports = router

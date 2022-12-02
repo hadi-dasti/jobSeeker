@@ -30,11 +30,29 @@ exports.acceptContractWorker = async(req,res)=>{
             })
         }
 
+        // edit worker
+        const foundWorker = await  Worker.findByIdAndUpdate(workerId,
+            {
+            $push :{acceptContractWorkerId :acceptContractWorker._id},
+            },
+            {
+             new : true
+            })
+
+        // edit contractStructure
+        const foundContractStructure = await ContractStructure.findByIdAndUpdate(contractId,
+            {
+                $push : {acceptContractWorkerId: acceptContractWorker._id}
+            },
+            {
+                new :true
+            })
+
         return res.status(201).json({
             success : true,
             data :
                 {acceptContractWorkerID : acceptContractWorker._id},
-            msg : 'successfully accept_contract'
+            msg : `successfully accept_contract with push ${foundWorker.id} and ${foundContractStructure._id} `
         })
 
     }catch(err){

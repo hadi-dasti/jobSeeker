@@ -22,13 +22,4 @@ router.delete('/delete_contract/:contractID',deleteContract)
 
 
 
-
-
-
-
-
-
-
-
-
 module.exports = router

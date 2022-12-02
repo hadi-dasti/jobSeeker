@@ -15,7 +15,8 @@ const workerSchema = new Schema({
     mobileNumber:{type :String, minLength :9 , maxLength :11, index :true, required :[true,'Please provide a mobileNumber']},
     roleWorker:{type :String, enum :['SIMPLE','SPECIAL'],required :[true,'Please provide a roleWorker']},
     password :{type :String , minLength : 6, select : false , required : [true,'Please provide a password']},
-    financial :{type : Schema.Types.ObjectId ,ref :'Financial'}
+    contractsStructureId :{type :[Schema.Types.ObjectId],ref:'ContractStructure'},
+    acceptContractWorkerId :{type : Schema.Types.ObjectId, ref:'AcceptContract'}
 
 },
     {timestamps :true}
