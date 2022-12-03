@@ -125,3 +125,61 @@ exports.getAllAcceptContract = async(req,res)=>{
         })
     }
 }
+
+// delete AcceptContract with workerId and contractId
+exports.deleteAcceptContract = async(req,res)=>{
+    try{
+
+        //found acceptContractId
+        const deleteAcceptContract = await AcceptContract.findByIdAndDelete(req.params.id)
+
+        if(!deleteAcceptContract){
+           return res.status(404).json({
+               success : false,
+               msg : 'ERROR_NOT_FOUND'
+           })
+        }
+
+        // found acceptContractId for delete in worker
+        const ownerWorker = deleteAcceptContract.workerId
+
+        if(ownerWorker){
+                const parentWorkerId = await Worker.findByIdAndUpdate(ownerWorker,{
+                    $pull :{acceptContractWorkerId: req.params.id}
+                },
+                 {
+                    new:true
+                })
+            console.log(parentWorkerId)
+        }
+
+
+        // found acceptContractId for delete contract
+        const ownerContract = deleteAcceptContract.contractId;
+
+        if(ownerContract){
+            const parentContractId = await ContractStructure.findByIdAndUpdate(ownerContract,{
+                $pull:{acceptContractWorkerId:req.params.id}
+            },
+            {
+              new : true
+            })
+            console.log(parentContractId)
+        }
+
+
+        return res.status(200).json({
+            success : true,
+            msg : 'successfully delete acceptContract with workerId and contractStructureId'
+        })
+
+
+    }catch(err){
+        console.log(err)
+        return res.status(500).json({
+            success : false,
+            msg : 'Internal Server Error'
+        })
+    }
+
+}
