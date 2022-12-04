@@ -26,5 +26,7 @@ router.post('/verify_otp',validationVerifyWorker,validationError,verifyOtpWorker
 router.use('/contract',checkAuth ,require('./contract/contractStructureRouter'))
 // config Accept_Contract
 router.use('/accept_contract',require('./contract/acceptContractRouter'))
+// config start contract
+router.use('/start_contract',require('./contract/startContractRouter'))
 
 module.exports = router
