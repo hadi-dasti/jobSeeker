@@ -50,6 +50,7 @@ exports.createStartContract = async(req,res)=>{
 exports.getAllStartContractWorker = async(req,res)=>{
     try{
         const startContractWorker = await StartContract.aggregate([
+
             {
                 $lookup:{
                     from:'workers',
@@ -82,6 +83,20 @@ exports.getAllStartContractWorker = async(req,res)=>{
             },
             {
                 $unwind:'$acceptContract'
+            },
+
+            {
+                $project :{
+                    "createdAt":0,
+                   "updatedAt":0,
+                    "__v":0
+                }
+            },
+
+            {
+                $sort :{
+                    "_id":1
+                }
             }
         ])
 
