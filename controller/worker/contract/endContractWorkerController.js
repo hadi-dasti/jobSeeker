@@ -57,12 +57,37 @@ exports.getOneContractWorker = async(req,res)=>{
             {
              $match : { _id: ObjectId("6398418490823bf41cd5eb4c")}
             },
+
             {
-            $project :{
-                "createdAt":0,
-                "updatedAt":0,
-                "__v":0
-            }
+            $lookup :{
+                    from :"workers",
+                    localField:"workerId",
+                    foreignField:"_id",
+                    as :"worker"
+                }
+            },
+            {
+                $unwind :"$worker"
+            },
+            {
+                $lookup :{
+                    from :"contractstructures",
+                    localField: "contractId",
+                    foreignField: "_id",
+                    as :"contractStructure"
+                }
+            },
+            {
+                $unwind : "$contractStructure"
+            },
+            {
+                $project :{
+                    "createdAt":0,
+                    "updatedAt":0,
+                    "__v":0,
+                    "contractId" :0,
+                    "workerId" :0
+                }
             }
         ])
 
