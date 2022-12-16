@@ -8,13 +8,10 @@ const {createContractWorker,getAllContract,updateContract,deleteContract} =requi
 
 //create structure router
 router.post('/create-contract',createContractWorker)
-
 // get all contract
 router.get('/get-contract',getAllContract)
-
 //update contract
 router.put('/update_contract/:contractID',updateContract)
-
 // delete contract
 router.delete('/delete_contract/:contractID',deleteContract)
 

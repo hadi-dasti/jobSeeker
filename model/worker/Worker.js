@@ -16,7 +16,9 @@ const workerSchema = new Schema({
     roleWorker:{type :String, enum :['SIMPLE','SPECIAL'],required :[true,'Please provide a roleWorker']},
     password :{type :String , minLength : 6, select : false , required : [true,'Please provide a password']},
     contractsStructureId :{type :[Schema.Types.ObjectId],ref:'ContractStructure'},
-    acceptContractWorkerId :{type : Schema.Types.ObjectId, ref:'AcceptContract'}
+    acceptContractWorkerId :{type : [Schema.Types.ObjectId], ref:'AcceptContract'},
+    startContractWorkerId :{type:[Schema.Types.ObjectId],ref:'StartContractWorker'},
+    endContractWorkerId :{type:[Schema.Types.ObjectId], ref :'EndContractWorker'}
 
 },
     {timestamps :true}

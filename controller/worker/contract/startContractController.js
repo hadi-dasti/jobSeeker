@@ -46,7 +46,7 @@ exports.createStartContract = async(req,res)=>{
     }
 }
 
-// get document startWorker with aggregation pip line and lookup
+// get document startWorker with  $lookup
 exports.getAllStartContractWorker = async(req,res)=>{
     try{
         const startContractWorker = await StartContract.aggregate([

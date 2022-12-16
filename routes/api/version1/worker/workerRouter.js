@@ -27,6 +27,8 @@ router.use('/contract',checkAuth ,require('./contract/contractStructureRouter'))
 // config Accept_Contract
 router.use('/accept_contract',require('./contract/acceptContractRouter'))
 // config start contract
-router.use('/start_contract',require('./contract/startContractRouter'))
+router.use('/start_worker_contract',require('./contract/startContractRouter'))
+//config end contract
+router.use('/end_contract',require('./contract/endContractWorkerRouter'))
 
 module.exports = router

@@ -2,6 +2,8 @@ const EndContractWorker = require('../../../model/worker/contract/EndContractWor
 const Worker = require('../../../model/worker/Worker')
 const ObjectId = require('mongoose').Types.ObjectId
 
+
+//create and save on document for endContractController
 exports.createEndContractWorker = async(req,res)=>{
     try{
         const {workerId} =req.params;
@@ -50,7 +52,7 @@ exports.createEndContractWorker = async(req,res)=>{
     }
 }
 
-
+// get one document as endContractRouter with $lookup and $match
 exports.getOneContractWorker = async(req,res)=>{
     try{
         const getEndWorker = await EndContractWorker.aggregate([
@@ -109,5 +111,67 @@ exports.getOneContractWorker = async(req,res)=>{
             success : false,
             msg : [err.message , 'Internal Server Error']
         })
+    }
+}
+
+//get All documents AS endContractRouter with $groupBy and $lookup
+exports.getAllEndContractWorker = async(req,res)=>{
+    try{
+        const allEndContractWorker = await EndContractWorker.aggregate([
+            {
+                $lookup :{
+                    from :'workers',
+                    localField :'workerId',
+                    foreignField :'_id',
+                    as :'worker'
+                }
+            },
+            {
+                $unwind :'$worker'
+            },
+            {
+                $lookup :{
+                    from:'contractstructures',
+                    localField: 'contractId',
+                    foreignField: '_id',
+                    as :'contractStructure'
+                }
+            },
+            {
+                $unwind :'$contractStructure'
+            },
+
+            {
+                $limit:10
+            },
+            {
+                $project :{
+                    "createdAt" :0,
+                    "updatedAt":0,
+                    "__v":0,
+                    "workerId":0,
+                    "contractId":0
+                }
+            }
+        ])
+
+        if(!allEndContractWorker){
+           return res.status(404).json({
+               success :false,
+               msg :'ERROR_NOT-FOUND'
+           })
+        }
+
+        return res.status(200).json({
+            success :true,
+            data : allEndContractWorker,
+            msg :'successfully get ALL endContractWorker'
+        })
+
+    }catch(err){
+            return res.status(500).json({
+                success :false,
+                msg :[err.message,'Internal Server Error']
+            })
     }
 }

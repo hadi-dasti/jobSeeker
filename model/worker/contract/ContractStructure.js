@@ -6,8 +6,8 @@ const contractStructureSchema = new Schema({
     contractTime :{type :String, enum:['ONE_DAY','ONE_WEEK','ONE_MONTH'],required:[true,'please provide a contractTime']},
     contractCost : {type : String , required : [true ,'please provide a contractCost']},
     signature: { type:String, unique : true, required : [true ,' please provide a signature']},
-    workerId:{type:[Schema.Types.ObjectId] , ref :'Worker'},
-    acceptContractWorkerId :{type:[Schema.Types.ObjectId] , ref:'AcceptContract'}
+    workerId :{type :[Schema.Types.ObjectId],ref:'Worker'}
+
 },{
     timestamps : true
 })
