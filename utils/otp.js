@@ -1,7 +1,7 @@
 
 
 
-
+// CREATE RANDOM NUMBER FOR OTP MOBILE
 exports.generateOtp = (otp_length)=>{
 
     let digits = '0123456789';

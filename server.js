@@ -11,9 +11,11 @@ const workerRouter = require('./routes/routes')
 
 // require db
 const DB = require('./db/mongo')
+const postDb = require('./db/pgdb')
 
-// start mongodb
+// start db
 DB()
+postDb()
 
 // start app
 const app = express()
@@ -36,7 +38,7 @@ app.use('/', workerRouter)
 
 
 // start api
-app.listen(PORT,() => console.log(`start api on ${PORT}`))
+app.listen(PORT,() => console.log(`start api on port ${PORT}`))
 
 
 
